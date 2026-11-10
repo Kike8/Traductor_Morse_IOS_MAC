@@ -50,6 +50,21 @@ OTROS
 morse_gui.spec: añade hiddenimports para que PyInstaller incluya QtMultimedia y los módulos nuevos, y NSMicrophoneUsageDescription para el permiso de micrófono en macOS.
 test_decoder.py: 19 pruebas con audio sintético (ruido, velocidades, zumbido, cambio de velocidad…). Se ejecuta con python test_decoder.py y conviene lanzarlo si alguna vez tocas el decodificador.
 
+PASOS PARA CEAR LA APP
+
+# 1. Entorno limpio con las dependencias
+python3 -m venv venv
+source venv/bin/activate
+pip install PyQt5 pyinstaller
+
+# 2. Comprueba que funciona antes de empaquetar
+python morse_gui.py
+
+# 3. Genera la aplicación
+pyinstaller --noconfirm --clean morse_gui.spec
+
+# 4. Pruébala
+open dist/morse_gui.app
 
 
 
