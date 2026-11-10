@@ -5,7 +5,7 @@ a = Analysis(
     ['morse_gui.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('morse.png', '.')],   # icono de la ventana
     hiddenimports=['PyQt5.QtMultimedia', 'morse_decoder', 'morse_receptor'],
     hookspath=[],
     hooksconfig={},
@@ -45,7 +45,7 @@ coll = COLLECT(
 app = BUNDLE(
     coll,
     name='morse_gui.app',
-    icon=None,
+    icon='morse.icns',
     bundle_identifier='com.ea4ivw.morsegui',   # identificador estable (necesario para recordar el permiso de micrófono)
     info_plist={
         # Necesario en macOS para que la app pueda usar el micrófono (receptor Morse)

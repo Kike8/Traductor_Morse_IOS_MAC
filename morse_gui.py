@@ -1,10 +1,10 @@
-
 # Traductor de Código Morse: Traduce de Texto a Código Morse y viceversa
 # Reproduce el código morse generado y escucha transmisiones para detectar código morse
 # Autor quicastillo@gmail.com  EA4IVW 
 
 
 # morse_gui.py
+import os
 import sys
 import re
 import unicodedata
@@ -139,6 +139,20 @@ def morse_a_texto(morse: str, MORSE_INV: dict) -> str:
 # ─────────────────────────────────────────────────────────────────────────────
 # GUI
 # ─────────────────────────────────────────────────────────────────────────────
+def ruta_recurso(nombre: str) -> str:
+    """Ruta de un archivo incluido con la app (en desarrollo y empaquetado con PyInstaller)."""
+    base = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base, nombre)
+
+
+def cargar_icono() -> QIcon:
+    """Icono de la aplicación (morse.png); si no existe, el icono del tema del sistema."""
+    icono = QIcon(ruta_recurso("morse.png"))
+    if icono.isNull():
+        icono = QIcon.fromTheme("applications-education")
+    return icono
+
+
 class MorseGUI(QWidget):
     def __init__(self):
         super().__init__()
@@ -150,7 +164,7 @@ class MorseGUI(QWidget):
         self.setWindowTitle("Traductor Código Morse ⇄ Texto")
         self.setMinimumSize(780, 680)
         try:
-            self.setWindowIcon(QIcon.fromTheme("applications-education"))
+            self.setWindowIcon(cargar_icono())
         except Exception:
             pass
 
@@ -597,7 +611,16 @@ class MorseGUI(QWidget):
 # main
 # ─────────────────────────────────────────────────────────────────────────────
 def main():
+    # Windows: sin esto, la barra de tareas agrupa la app bajo el icono de Python
+    if sys.platform == "win32":
+        try:
+            import ctypes
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ea4ivw.morsegui")
+        except Exception:
+            pass
+
     app = QApplication(sys.argv)
+    app.setWindowIcon(cargar_icono())   # icono de ventana, barra de tareas y Dock de macOS
     gui = MorseGUI()
     gui.show()
     sys.exit(app.exec_())
